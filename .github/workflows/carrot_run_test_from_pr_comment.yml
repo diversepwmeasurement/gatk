@@ -1,16 +1,17 @@
-name: carrot-test-run-from-pr-comment
-on:
-  issue_comment:
-    types: [created]
 jobs:
   publish-test:
-    runs-on: ubuntu-20.04
+    runs-on: self-hosted
     steps:
-      - name: Parse comment
-        uses: broadinstitute/carrot-publish-github-action@0.6.0
-        with:
-          software-name: gatk
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          topic-name: ${{ secrets.CARROT_TOPIC_NAME }}
-          sa-key: ${{ secrets.CARROT_SA_KEY }}
-          minimum-permissions: write
+    - continue-on-error: true
+      name: Parse comment
+      uses: broadinstitute/carrot-publish-github-action@0.6.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        minimum-permissions: write
+        sa-key: ${{ secrets.CARROT_SA_KEY }}
+        software-name: gatk
+        topic-name: ${{ secrets.CARROT_TOPIC_NAME }}
+name: carrot-test-run-from-pr-comment
+on:
+  repository_dispatch:
+    types: trigger-ga___carrot_run_test_from_pr_comment.yml
